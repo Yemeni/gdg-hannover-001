@@ -1,13 +1,43 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
-  </head>
-  <body>
-    <div id="app"></div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impress.js + GSAP + TailwindCSS</title>
+</head>
+<body class="bg-gray-900 text-white">
+    <div id="impress">
+        <div
+            id="slide1"
+            class="step bg-blue-600 text-white p-8 rounded-lg shadow-lg"
+            data-x="0"
+            data-y="0"
+            data-z="0"
+        >
+            <h1 class="text-3xl font-bold">Welcome</h1>
+            <p class="mt-4">3D Presentation with Impress.js</p>
+        </div>
+        <div
+            id="slide2"
+            class="step bg-green-500 text-white p-8 rounded-lg shadow-lg"
+            data-x="1000"
+            data-y="500"
+            data-z="-1000"
+        >
+            <h1 class="text-3xl font-bold">Next Slide</h1>
+            <p class="mt-4">Styled with TailwindCSS and animated with GSAP.</p>
+        </div>
+        <div
+            id="slide3"
+            class="step bg-yellow-400 text-black p-8 rounded-lg shadow-lg"
+            data-x="2000"
+            data-y="1000"
+            data-z="-2000"
+        >
+            <h1 class="text-3xl font-bold">Final Slide</h1>
+            <p class="mt-4">Smooth animations with GSAP.</p>
+        </div>
+    </div>
     <script type="module" src="/src/main.js"></script>
-  </body>
+</body>
 </html>
