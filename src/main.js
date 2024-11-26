@@ -152,7 +152,7 @@ document.addEventListener('impress:stepenter', (event) => {
         controls.animateZoom(zoomLevel, 2); // Smoothly animate zoom to the new level
     }
 
-    if (hasRotationX || hasRotationY || hasRotationSpeed) {
+    if (hasRotationX || hasRotationY ) {
         // Read rotation and speed data from slide attributes, fallback to current state if missing
         const rotationX = hasRotationX ? parseFloat(slide.getAttribute('data-rotation-x')) : controls.getRotation().x;
         const rotationY = hasRotationY ? parseFloat(slide.getAttribute('data-rotation-y')) : controls.getRotation().y;
@@ -167,6 +167,7 @@ document.addEventListener('impress:stepenter', (event) => {
             onUpdate: () => {
                 // Dynamically update the Earth's rotation during animation
                 controls.setRotation(controls.getRotation().x, controls.getRotation().y);
+                // controls.setRotationSpeed(rotationSpeed);
             },
         });
 
@@ -182,10 +183,13 @@ document.addEventListener('impress:stepenter', (event) => {
         // Update slide's data attributes after animation
         slide.setAttribute('data-rotation-x', rotationX.toFixed(2));
         slide.setAttribute('data-rotation-y', rotationY.toFixed(2));
-        slide.setAttribute('data-rotation-speed', rotationSpeed.toFixed(3));
+        // slide.setAttribute('data-rotation-speed', rotationSpeed.toFixed(3));
 
         console.log('Slide entered:', slide.id, slide);
-    } else {
+    } else if( hasRotationSpeed){
+        const rotationSpeed = parseFloat(slide.getAttribute('data-rotation-speed'));
+        controls.setRotationSpeed(rotationSpeed);
+    }else{
         console.log(`No rotation or speed attributes set for slide: ${slide.id}`);
     }
 });
