@@ -5,7 +5,6 @@ import './style.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
-
 const initAnimations = () => {
     // Basic animations
     gsap.from('.step', {
@@ -31,12 +30,23 @@ const initAnimations = () => {
     });
 };
 
+const reinitializeImpress = () => {
+    console.log('Reinitializing Impress.js...');
+    window.impress().init();
+    initAnimations();
+};
+
 // Main entry point
 document.addEventListener('DOMContentLoaded', async () => {
     const impressContainer = document.createElement('div');
     impressContainer.id = 'impress';
     document.body.appendChild(impressContainer);
 
+
     window.impress().init();
     initAnimations();
+
+    window.addEventListener('resize', () => {
+        reinitializeImpress();
+    });
 });
