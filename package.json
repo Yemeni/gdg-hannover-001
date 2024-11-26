@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "gsap": "^3.12.5",
-    "impress.js": "^1.1.0"
+    "impress.js": "^1.1.0",
+    "three": "^0.170.0"
   }
 }
