@@ -77,12 +77,17 @@ const init3DBackground = () => {
     // Position the camera
     camera.position.z = 10;
 
+    let rotationSpeed = 0.001; // Default rotation speed
     // Animation loop
     const animate = () => {
         requestAnimationFrame(animate);
 
-        earth.rotation.y += 0.001;
-        clouds.rotation.y += 0.0015;
+        // earth.rotation.y += 0.001;
+        // clouds.rotation.y += 0.0015;
+
+                // Apply rotation and speed
+        earth.rotation.y += rotationSpeed;
+        clouds.rotation.y += rotationSpeed * 1.5; // Clouds rotate slightly faster
         renderer.render(scene, camera);
     };
     animate();
@@ -92,6 +97,24 @@ const init3DBackground = () => {
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
     });
+
+    // Expose functions to set Earth rotation and speed
+    const controls = {
+        setRotation(x, y) {
+            earth.rotation.x = x;
+            earth.rotation.y = y;
+            renderer.render(scene, camera); // Trigger an immediate update
+        },
+        setRotationSpeed(speed) {
+            rotationSpeed = speed;
+        },
+
+
+    };
+
+    // Expose controls globally for testing/debugging
+    window.earthControls = controls;
+    return controls;
 };
 
 // Main entry point
@@ -101,13 +124,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.body.appendChild(impressContainer);
 
     window.impress().init();
-    initAnimations();
+    // initAnimations();
     init3DBackground();
 
     window.addEventListener('resize', () => {
         console.log('Window resized. Reinitializing Impress.js.');
         window.impress().init();
-        initAnimations();
+        // initAnimations();
         init3DBackground();
     });
+
+
 });
