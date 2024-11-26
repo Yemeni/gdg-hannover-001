@@ -115,7 +115,24 @@ const init3DBackground = () => {
 
         getRotationSpeed(){
             return rotationSpeed;
-        }
+        },
+                setZoom(zoomLevel) {
+            camera.fov = zoomLevel;
+            camera.updateProjectionMatrix();
+        },
+        getZoom() {
+            return camera.fov;
+        },
+        animateZoom(zoomLevel, duration = 2) {
+            gsap.to(camera, {
+                fov: zoomLevel,
+                duration: duration,
+                ease: 'power2.out',
+                onUpdate: () => {
+                    camera.updateProjectionMatrix();
+                },
+            });
+        },
 
 
     };
@@ -123,39 +140,56 @@ const init3DBackground = () => {
 document.addEventListener('impress:stepenter', (event) => {
     const slide = event.target; // Active slide element
 
-    // Read rotation and speed data from slide attributes
-    const rotationX = parseFloat(slide.getAttribute('data-rotation-x')) || controls.getRotation().x;
-    const rotationY = parseFloat(slide.getAttribute('data-rotation-y')) || controls.getRotation().y;
-    const rotationSpeed = parseFloat(slide.getAttribute('data-rotation-speed')) || controls.getRotationSpeed();
+    // Check if rotation and speed attributes are explicitly set
+    const hasRotationX = slide.hasAttribute('data-rotation-x');
+    const hasRotationY = slide.hasAttribute('data-rotation-y');
+    const hasRotationSpeed = slide.hasAttribute('data-rotation-speed');
 
-    // Animate Earth's rotation smoothly using GSAP
-    gsap.to(controls.getRotation(), {
-        x: rotationX,
-        y: rotationY,
-        duration: 2, // Animation duration in seconds
-        ease: 'power2.out', // Easing function for a smooth transition
-        onUpdate: () => {
-            // Dynamically update the Earth's rotation during animation
-            controls.setRotation(controls.getRotation().x, controls.getRotation().y);
-        },
-    });
+    const hasZoom = slide.hasAttribute('data-zoom');
 
-    // Smoothly change rotation speed
-    gsap.to(controls, {
-        duration: 2, // Duration for speed change
-        ease: 'power2.out',
-        onUpdate: () => {
-            controls.setRotationSpeed(rotationSpeed); // Dynamically update rotation speed
-        },
-    });
+    if (hasZoom) {
+        const zoomLevel = parseFloat(slide.getAttribute('data-zoom'));
+        controls.animateZoom(zoomLevel, 2); // Smoothly animate zoom to the new level
+    }
 
-    // Update slide's data attributes after animation
-    slide.setAttribute('data-rotation-x', rotationX.toFixed(2));
-    slide.setAttribute('data-rotation-y', rotationY.toFixed(2));
-    slide.setAttribute('data-rotation-speed', rotationSpeed.toFixed(3));
+    if (hasRotationX || hasRotationY || hasRotationSpeed) {
+        // Read rotation and speed data from slide attributes, fallback to current state if missing
+        const rotationX = hasRotationX ? parseFloat(slide.getAttribute('data-rotation-x')) : controls.getRotation().x;
+        const rotationY = hasRotationY ? parseFloat(slide.getAttribute('data-rotation-y')) : controls.getRotation().y;
+        const rotationSpeed = hasRotationSpeed ? parseFloat(slide.getAttribute('data-rotation-speed')) : controls.getRotationSpeed();
 
-    console.log('Slide entered:', slide.id, slide);
+        // Animate Earth's rotation smoothly using GSAP
+        gsap.to(controls.getRotation(), {
+            x: rotationX,
+            y: rotationY,
+            duration: 2, // Animation duration in seconds
+            ease: 'power2.out', // Easing function for a smooth transition
+            onUpdate: () => {
+                // Dynamically update the Earth's rotation during animation
+                controls.setRotation(controls.getRotation().x, controls.getRotation().y);
+            },
+        });
+
+        // Smoothly change rotation speed
+        gsap.to(controls, {
+            duration: 2, // Duration for speed change
+            ease: 'power2.out',
+            onUpdate: () => {
+                controls.setRotationSpeed(rotationSpeed); // Dynamically update rotation speed
+            },
+        });
+
+        // Update slide's data attributes after animation
+        slide.setAttribute('data-rotation-x', rotationX.toFixed(2));
+        slide.setAttribute('data-rotation-y', rotationY.toFixed(2));
+        slide.setAttribute('data-rotation-speed', rotationSpeed.toFixed(3));
+
+        console.log('Slide entered:', slide.id, slide);
+    } else {
+        console.log(`No rotation or speed attributes set for slide: ${slide.id}`);
+    }
 });
+
 
     // Expose controls globally for testing/debugging
     window.earthControls = controls;
