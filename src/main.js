@@ -5,18 +5,6 @@ import './style.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
-async function loadSlides() {
-    // Import all modules from the slides directory
-    const modules = import.meta.glob('./slides/*.js');
-    const impress = document.getElementById('impress');
-
-    // Import each module dynamically and append the returned slide to the presentation
-    for (const path in modules) {
-        const module = await modules[path]();
-        const slide = module.default();
-        impress.appendChild(slide);
-    }
-}
 
 const initAnimations = () => {
     // Basic animations
@@ -49,7 +37,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     impressContainer.id = 'impress';
     document.body.appendChild(impressContainer);
 
-    await loadSlides();
     window.impress().init();
     initAnimations();
 });
