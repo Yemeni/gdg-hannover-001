@@ -2,3 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
+
+.step {
+    width: 80vw; /* 80% of the parent width */
+    height: 80vh; /* 80% of the parent height */
+    box-sizing: border-box; /* Include padding and border in dimensions */
+    overflow: hidden; /* Prevent content from overflowing */
+    margin: auto; /* Center the slide */
+    position: relative; /* Ensure child elements are positioned relative to the slide */
+    display: flex; /* Center content */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.slide-large {
+    width: 100vw; /* Full parent width */
+    height: 100vh; /* Full parent height */
+}
+
+.slide-small {
+    width: 50vw; /* Half of the parent width */
+    height: 50vh; /* Half of the parent height */
+}
