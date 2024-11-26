@@ -109,8 +109,53 @@ const init3DBackground = () => {
             rotationSpeed = speed;
         },
 
+        getRotation(){
+            return earth.rotation;
+        },
+
+        getRotationSpeed(){
+            return rotationSpeed;
+        }
+
 
     };
+
+document.addEventListener('impress:stepenter', (event) => {
+    const slide = event.target; // Active slide element
+
+    // Read rotation and speed data from slide attributes
+    const rotationX = parseFloat(slide.getAttribute('data-rotation-x')) || controls.getRotation().x;
+    const rotationY = parseFloat(slide.getAttribute('data-rotation-y')) || controls.getRotation().y;
+    const rotationSpeed = parseFloat(slide.getAttribute('data-rotation-speed')) || controls.getRotationSpeed();
+
+    // Animate Earth's rotation smoothly using GSAP
+    gsap.to(controls.getRotation(), {
+        x: rotationX,
+        y: rotationY,
+        duration: 2, // Animation duration in seconds
+        ease: 'power2.out', // Easing function for a smooth transition
+        onUpdate: () => {
+            // Dynamically update the Earth's rotation during animation
+            controls.setRotation(controls.getRotation().x, controls.getRotation().y);
+        },
+    });
+
+    // Smoothly change rotation speed
+    gsap.to(controls, {
+        duration: 2, // Duration for speed change
+        ease: 'power2.out',
+        onUpdate: () => {
+            controls.setRotationSpeed(rotationSpeed); // Dynamically update rotation speed
+        },
+    });
+
+    // Update slide's data attributes after animation
+    slide.setAttribute('data-rotation-x', rotationX.toFixed(2));
+    slide.setAttribute('data-rotation-y', rotationY.toFixed(2));
+    slide.setAttribute('data-rotation-speed', rotationSpeed.toFixed(3));
+
+    console.log('Slide entered:', slide.id, slide);
+});
 
     // Expose controls globally for testing/debugging
     window.earthControls = controls;
@@ -124,13 +169,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.body.appendChild(impressContainer);
 
     window.impress().init();
-    // initAnimations();
+    initAnimations();
     init3DBackground();
+
+
+
 
     window.addEventListener('resize', () => {
         console.log('Window resized. Reinitializing Impress.js.');
         window.impress().init();
-        // initAnimations();
+        initAnimations();
         init3DBackground();
     });
 
