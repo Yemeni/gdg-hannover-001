@@ -6,6 +6,8 @@ import './style.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// todo: extract the animations logic to a separate file
+// todo: extract the 3D background logic to a separate file
 const initAnimations = () => {
     gsap.from('.step', {
         opacity: 0,
@@ -77,7 +79,7 @@ const init3DBackground = () => {
     // Position the camera
     camera.position.z = 10;
 
-    let rotationSpeed = 0.001; // Default rotation speed
+    let rotationSpeed = 0.0002; // Default rotation speed
     // Animation loop
     const animate = () => {
         requestAnimationFrame(animate);
@@ -194,6 +196,39 @@ document.addEventListener('impress:stepenter', (event) => {
     }
 });
 
+// todo: refactor and make every slide have a script section that will be executed when the slide is entered
+document.addEventListener('impress:stepenter', (event) => {
+    if (event.target.id === 'slide5') {
+        // Animate project icons
+        gsap.fromTo(
+            '.project-icon',
+            { opacity: 0, y: 20, scale: 0.8 }, // Start state
+            {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 1,
+                stagger: 0.2,
+                ease: 'power2.out'
+            } // End state
+        );
+
+        // Animate award icons
+        gsap.fromTo(
+            '.award-icon',
+            { opacity: 0, y: 20, scale: 0.8 }, // Start state
+            {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 1,
+                stagger: 0.2,
+                ease: 'power2.out',
+                delay: 0.5 // Starts after project icons
+            } // End state
+        );
+    }
+});
 
     // Expose controls globally for testing/debugging
     window.earthControls = controls;
