@@ -1,6 +1,13 @@
-# GDG Hannover Presentation
+# GDG Hannover Presentation - Live Demo
 
 An interactive 3D presentation built with Impress.js, GSAP, and TailwindCSS.
+
+---
+
+## **Live Demo**
+
+Explore the live demo of the presentation here:  
+[GDG Hannover Presentation Demo](https://p.yousefh.com/gdg-hannover-001/)
 
 ---
 
